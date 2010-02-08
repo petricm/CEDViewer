@@ -135,7 +135,10 @@ void CEDViewer::processEvent( LCEvent * evt ) {
 
 //-----------------------------------------------------------------------
 // Reset drawing buffer and START drawing collection
-  MarlinCED::newEvent(this) ;
+
+//hauke hoelbe 08.02.2010
+//  MarlinCED::newEvent(this) ;
+  MarlinCED::newEvent(this,0,evt); //need "evt" for picking!
 //   ced_new_event();  
 //-----------------------------------------------------------------------
 
@@ -215,10 +218,11 @@ void CEDViewer::processEvent( LCEvent * evt ) {
         int color =  _colors[ i % _colors.size() ] ;
         for( CalorimeterHitVec::const_iterator it = hits.begin();  it != hits.end() ; it++ ) {
           
-          ced_hit( (*it)->getPosition()[0],
+          //hauke hoelbe: add id for picking!
+          ced_hit_ID( (*it)->getPosition()[0],
                    (*it)->getPosition()[1],
                    (*it)->getPosition()[2],
-                   ml, size , color ) ;
+                   ml, size , color, clu->id() ) ;
           
         } // hits
         
@@ -226,7 +230,8 @@ void CEDViewer::processEvent( LCEvent * evt ) {
         float y = clu->getPosition()[1] ;
         float z = clu->getPosition()[2] ;
 
-        ced_hit( x,y,z, ml, size*3 , color ) ;
+        //hauke hoelbe: add id for picking
+        ced_hit_ID( x,y,z, ml, size*3 , color, clu->id() ) ;
 
         Hep3Vector v(x,y,z) ;
 
@@ -249,9 +254,10 @@ void CEDViewer::processEvent( LCEvent * evt ) {
  
         Hep3Vector dp( v + d ) , dm( v - d )   ;
 
-        ced_line( dp.x() , dp.y() , dp.z(),  
+        //hauke hoelbe: need the id for picking mode!
+        ced_line_ID( dp.x() , dp.y() , dp.z(),  
                   dm.x() , dm.y() , dm.z(),
-                  ml , 1 , color );	 
+                  ml , 1 , color, clu->id() );	 
 	  
 
       } // cluster
@@ -269,10 +275,11 @@ void CEDViewer::processEvent( LCEvent * evt ) {
 	  
         for( TrackerHitVec::const_iterator it = hits.begin();  it != hits.end() ; it++ ) {
 	    
-          ced_hit( (*it)->getPosition()[0],
+          //hauke hoelbe: add id for picking
+          ced_hit_ID( (*it)->getPosition()[0],
                    (*it)->getPosition()[1],
                    (*it)->getPosition()[2],
-                   ml , size , _colors[ i % _colors.size() ] ) ;
+                   ml , size , _colors[ i % _colors.size() ], trk->id() ) ;
 	    
         } // hits
 	  
@@ -382,9 +389,10 @@ void CEDViewer::processEvent( LCEvent * evt ) {
           double length = ( std::abs( pt/pz) > r_max/z_max ) ?  // hit barrel or endcap ? 
             r_max * p / pt  :  z_max * p / pz  ;
 	    
-          ced_line( r_min*px/p ,  r_min*py/p ,  r_min*pz/p , 
+          //hauke hoelbe: add id for picking
+          ced_line_ID( r_min*px/p ,  r_min*py/p ,  r_min*pz/p , 
                     length*px/p ,  length*py/p ,  length*pz/p , 
-                    marker , size, color );	 
+                    marker , size, color, mcp->id() );	 
 	    
         }
       }
