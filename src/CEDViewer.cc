@@ -137,8 +137,15 @@ void CEDViewer::processEvent( LCEvent * evt ) {
 // Reset drawing buffer and START drawing collection
 
 //hauke hoelbe 08.02.2010
-//  MarlinCED::newEvent(this) ;
-  MarlinCED::newEvent(this,0,evt); //need "evt" for picking!
+  MarlinCED::newEvent(this) ;
+
+//--------------------------------------- //hauke
+  //MarlinCED::newEvent(this,0,evt); //need "evt" for picking!
+  CEDPickingHandler::registerFunction(LCIO::SIMTRACKERHIT, &CEDPickingHandler::printSimTrackerHit);
+  CEDPickingHandler::registerFunction(LCIO::SIMCALORIMETERHIT, &CEDPickingHandler::printSimCalorimeterHit);
+  CEDPickingHandler::update(evt); 
+
+
 //   ced_new_event();  
 //-----------------------------------------------------------------------
 
@@ -403,7 +410,11 @@ void CEDViewer::processEvent( LCEvent * evt ) {
       layer = ( layer > -1 ? layer : SIMTRACKERHIT_LAYER ) ;
 
       LCTypedVector<SimTrackerHit> v( col ) ;
+
+//hauke hoelbe
       MarlinCED::drawObjectsWithPosition( v.begin(), v.end() , marker, size , color, layer) ;
+//      MarlinCED::drawObjectsWithPositionID(col, v.begin(), v.end() , marker, size , color, layer) ;
+
 
     } else if( col->getTypeName() == LCIO::SIMCALORIMETERHIT ){
 
@@ -450,6 +461,10 @@ void CEDViewer::processEvent( LCEvent * evt ) {
 void CEDViewer::check( LCEvent * evt ) { 
   // nothing to check here - could be used to fill checkplots in reconstruction processor
 }
+
+void CEDViewer::printParticle(int id, LCEvent * evt){
+  std::cout << "CEDViewer::printParticle id: " << id << std::endl;
+} 
 
 
 void CEDViewer::end(){ 
