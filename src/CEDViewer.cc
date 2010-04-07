@@ -141,9 +141,16 @@ void CEDViewer::processEvent( LCEvent * evt ) {
 
 //--------------------------------------- //hauke
   //MarlinCED::newEvent(this,0,evt); //need "evt" for picking!
+  CEDPickingHandler &pHandler=CEDPickingHandler::getInstance();
+  pHandler.registerFunction(LCIO::SIMTRACKERHIT, &CEDPickingHandler::printSimTrackerHit);
+  pHandler.registerFunction(LCIO::SIMCALORIMETERHIT, &CEDPickingHandler::printSimCalorimeterHit);
+  pHandler.update(evt); 
+
+  /*
   CEDPickingHandler::registerFunction(LCIO::SIMTRACKERHIT, &CEDPickingHandler::printSimTrackerHit);
   CEDPickingHandler::registerFunction(LCIO::SIMCALORIMETERHIT, &CEDPickingHandler::printSimCalorimeterHit);
   CEDPickingHandler::update(evt); 
+*/
 
 
 //   ced_new_event();  
