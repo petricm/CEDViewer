@@ -142,8 +142,12 @@ void CEDViewer::processEvent( LCEvent * evt ) {
 //--------------------------------------- //hauke
   //MarlinCED::newEvent(this,0,evt); //need "evt" for picking!
   CEDPickingHandler &pHandler=CEDPickingHandler::getInstance();
+  pHandler.registerFunction(LCIO::MCPARTICLE, &CEDPickingHandler::printMCParticle);
+  pHandler.registerFunction(LCIO::TRACKERHIT, &CEDPickingHandler::printTrackerHit);
   pHandler.registerFunction(LCIO::SIMTRACKERHIT, &CEDPickingHandler::printSimTrackerHit);
+  pHandler.registerFunction(LCIO::CALORIMETERHIT, &CEDPickingHandler::printCalorimeterHit);
   pHandler.registerFunction(LCIO::SIMCALORIMETERHIT, &CEDPickingHandler::printSimCalorimeterHit);
+  pHandler.registerFunction(LCIO::VERTEX, &CEDPickingHandler::printVertex);
   pHandler.update(evt); 
 
   /*
@@ -338,19 +342,21 @@ void CEDViewer::processEvent( LCEvent * evt ) {
 	  
         float charge = mcp->getCharge (); 
 	  
+        //hauke die 2 nachfolgenden zeilen war aus kommentiert
+        //if( mcp-> getGeneratorStatus() != 1 ) continue ; // stable particles only   
+        // 	  if( mcp-> getSimulatorStatus() != 0 ) continue ; // stable particles only   
+        if( mcp->getDaughters().size() > 0  ) continue ;    // stable particles only   
+        // FIXME: need definition of stable particles (partons, decays in flight,...)
+	  
+        if ( mcp->getEnergy() < 0.001 ) continue ;           // ECut ?
+
         streamlog_out( DEBUG ) << "  drawing MCParticle pdg " 
                                << mcp->getPDG() 
                                << " genstat: " << mcp->getGeneratorStatus() 
                                << std::endl ;
 
 
-        //if( mcp-> getGeneratorStatus() != 1 ) continue ; // stable particles only   
-        //	  if( mcp-> getSimulatorStatus() != 0 ) continue ; // stable particles only   
-        if( mcp->getDaughters().size() > 0  ) continue ;    // stable particles only   
-        // FIXME: need definition of stable particles (partons, decays in flight,...)
-	  
-        if ( mcp->getEnergy() < 0.001 ) continue ;           // ECut ?
-	  
+        	  
         double px = mcp->getMomentum()[0]; 
         double py = mcp->getMomentum()[1]; 
         double pz = mcp->getMomentum()[2];
@@ -372,10 +378,11 @@ void CEDViewer::processEvent( LCEvent * evt ) {
                                  << sqrt(px*px+py*py)
                                  << std::endl ;
 
+          //std::cout<<"Hauke: drawHelix called from cedviewer" << std::endl;
           MarlinCED::drawHelix( bField , charge, x, y, z, 
                                 px, py, pz, marker , size , 0x7af774  ,
                                 0.0,  padLayout.getPlaneExtent()[1]+100. ,
-                                gearTPC.getMaxDriftLength()+100. ) ;	    
+                                gearTPC.getMaxDriftLength()+100., mcp->id() ) ;	    
 	    
         } else { // neutral
 	    
