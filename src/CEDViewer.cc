@@ -145,17 +145,19 @@ void CEDViewer::processEvent( LCEvent * evt ) {
 //--------------------------------------- //hauke
   //MarlinCED::newEvent(this,0,evt); //need "evt" for picking!
   CEDPickingHandler &pHandler=CEDPickingHandler::getInstance();
-  pHandler.registerFunction(LCIO::MCPARTICLE, &CEDPickingHandler::printMCParticle);
+  //pHandler.registerFunction(LCIO::MCPARTICLE, &CEDPickingHandler::printMCParticle);
 //  pHandler.registerFunction(LCIO::MCPARTICLE, &printDefault<EVENT::MCParticle>); //<--printDefault aus MarlinCED.h
 
-  pHandler.registerFunction(LCIO::TRACKERHIT, &CEDPickingHandler::printTrackerHit);
-  pHandler.registerFunction(LCIO::SIMTRACKERHIT, &CEDPickingHandler::printSimTrackerHit);
-  pHandler.registerFunction(LCIO::CALORIMETERHIT, &CEDPickingHandler::printCalorimeterHit);
-  pHandler.registerFunction(LCIO::SIMCALORIMETERHIT, &CEDPickingHandler::printSimCalorimeterHit);
-  pHandler.registerFunction(LCIO::VERTEX, &CEDPickingHandler::printVertex);
-  pHandler.registerFunction(LCIO::RECONSTRUCTEDPARTICLE, &CEDPickingHandler::printReconstructedParticle);
-  pHandler.registerFunction(LCIO::TRACK, &CEDPickingHandler::printTrack);
-  pHandler.registerFunction(LCIO::CLUSTER, &CEDPickingHandler::printCluster);
+  //pHandler.registerFunction(LCIO::TRACKERHIT, &CEDPickingHandler::printTrackerHit);
+  //pHandler.registerFunction(LCIO::TRACKERHIT, &printDefault<LCIO::TRACKERHIT>);
+
+  //pHandler.registerFunction(LCIO::SIMTRACKERHIT, &CEDPickingHandler::printSimTrackerHit);
+  //pHandler.registerFunction(LCIO::CALORIMETERHIT, &CEDPickingHandler::printCalorimeterHit);
+  //pHandler.registerFunction(LCIO::SIMCALORIMETERHIT, &CEDPickingHandler::printSimCalorimeterHit);
+  //pHandler.registerFunction(LCIO::VERTEX, &CEDPickingHandler::printVertex);
+  //pHandler.registerFunction(LCIO::RECONSTRUCTEDPARTICLE, &CEDPickingHandler::printReconstructedParticle);
+  //pHandler.registerFunction(LCIO::TRACK, &CEDPickingHandler::printTrack);
+  //pHandler.registerFunction(LCIO::CLUSTER, &CEDPickingHandler::printCluster);
 
 
 
