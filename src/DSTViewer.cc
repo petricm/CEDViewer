@@ -403,9 +403,9 @@ void DSTViewer::processEvent( LCEvent * evt ) {
         					double scale_pt = 20;
         					double scale_mom = 25;
         					double min_pt = 50;
-    						ced_cone_r( min_pt + scale_pt*pt_norm , scale_mom*v.r() , center_c, rotation_c, layer, RGBAcolor);
-                            //does not make sense...
-    						//ced_cone_r_ID( min_pt + scale_pt*pt_norm , scale_mom*v.r() , center_c, rotation_c, layer, RGBAcolor,???); //hauke
+    						//ced_cone_r( min_pt + scale_pt*pt_norm , scale_mom*v.r() , center_c, rotation_c, layer, RGBAcolor);
+                            //does this make sense...
+    						ced_cone_r_ID( min_pt + scale_pt*pt_norm , scale_mom*v.r() , center_c, rotation_c, layer, RGBAcolor,jet->id()); //hauke
 
 						}
 				}
